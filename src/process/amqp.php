@@ -6,6 +6,9 @@ use Bunny\Channel;
 use Bunny\Client;
 use Bunny\Message;
 use Dotenv\Dotenv;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 Dotenv::createUnsafeImmutable(__DIR__ . '/../../')->load();
 
@@ -16,11 +19,14 @@ $connection = [
   'password' => $_ENV["RB_PASSWORD"],
 ];
 
+$mail = new PHPMailer(true);
+
 $bunny = new Client($connection);
 $bunny->connect();
 
 $channel = $bunny->channel();
 $channel->queueDeclare($_ENV["NOTIFYING_QUEUE"]);
+$channel->queueDeclare($_ENV["LOGGING_QUEUE"]);
 
 $channel->run(
   function (Message $message, Channel $channel, Client $bunny) {
