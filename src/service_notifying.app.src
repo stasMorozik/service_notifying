@@ -1,0 +1,20 @@
+{application, service_notifying, [
+	{description, "Mailer."},
+	{vsn, "0.1.0"},
+	{modules, []},
+	{registered, [dockerwatch_sup]},
+	{applications, [
+		kernel,
+		stdlib,
+    jiffy,
+		amqp_client
+	]},
+	{mod, {service_notifying_app, []}},
+	{env, [
+		{rb_user, "rabbit_user"},
+    {rb_password, "12345"},
+    {rb_host, "172.17.0.2"},
+    {queue, "mails"},
+    {logging_queue, "loger"}
+	]}
+]}.

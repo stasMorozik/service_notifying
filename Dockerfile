@@ -1,10 +1,9 @@
-FROM php:8.2-cli
-FROM composer:latest
+FROM erlang:latest
 
 WORKDIR /service_notifying
 
 COPY . .
 
-RUN COMPOSER_VENDOR_DIR="/vendor" composer install
+RUN rebar3 get-deps
 
-CMD ["php", "src/app.php"]
+CMD ["rebar3", "shell", "--sname", "service"]
